@@ -15,7 +15,7 @@ benchmark "issue_best_practices" {
 control "issue_has_assignee" {
   title = "Issues should have at least 1 user assigned"
   description = "Issues should have at least 1 assignee so it's clear who is responsible for it."
-  sql = <<EOT
+  sql = <<-EOT
     select
       i.html_url as resource,
       case
@@ -37,7 +37,7 @@ control "issue_has_assignee" {
 control "issue_has_labels" {
   title = "Issues should have labels applied"
   description = "Labels help organize issues and provide users with more context."
-  sql = <<EOT
+  sql = <<-EOT
     select
       i.html_url as resource,
       case
@@ -57,7 +57,7 @@ control "issue_has_labels" {
 control "issue_older_30_days" {
   title = "Issues should not be open longer than 30 days"
   description = "Issues should be resolved or closed in a timely manner."
-  sql = <<EOT
+  sql = <<-EOT
     select
       i.html_url as resource,
       case

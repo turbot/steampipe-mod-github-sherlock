@@ -18,7 +18,7 @@ benchmark "org_best_practices" {
 control "org_all_seats_used" {
   title = "All organization seats should be allocated"
   description = "Unused organization seats cost money and should be allocated or removed."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -35,7 +35,7 @@ control "org_all_seats_used" {
 control "org_two_factor_required" {
   title = "Two-factor authentication should be required for users in an organization"
   description = "Two-factor authentication makes it harder for unauthorized actors to access repositories and organizations."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -52,7 +52,7 @@ control "org_two_factor_required" {
 control "org_domain_verified" {
   title = "Domain should be verified in an organization"
   description = "Verifying your domain helps to confirm the organization's identity and send emails to users with verified emails."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -69,7 +69,7 @@ control "org_domain_verified" {
 control "org_members_cannot_create_public_repos" {
   title = "Organization members should not be able to create public repositories"
   description = "Accidentally creating a public repository can expose code and other assets."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -86,7 +86,7 @@ control "org_members_cannot_create_public_repos" {
 control "org_members_cannot_create_pages" {
   title = "Organization members should not be able to create pages"
   description = "Pages are public and may contain internal or sensitive information."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -103,7 +103,7 @@ control "org_members_cannot_create_pages" {
 control "org_email_set" {
   title = "Organization email should be set"
   description = "Setting an email provides useful contact information for users."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -120,7 +120,7 @@ control "org_email_set" {
 control "org_homepage_set" {
   title = "Organization homepage should be set"
   description = "Setting a homepage helps users learn more about your organization."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -137,7 +137,7 @@ control "org_homepage_set" {
 control "org_default_repo_permissions_limited" {
   title = "Organization default repository permissions should be limited"
   description = "Members of your organization should not have write or admin permissions by default in all repositories."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -154,7 +154,7 @@ control "org_default_repo_permissions_limited" {
 control "org_description_set" {
   title = "Organization description should be set"
   description = "Setting a description helps users learn more about your organization."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -171,7 +171,7 @@ control "org_description_set" {
 control "org_profile_pic_set" {
   title = "Organization profile picture should be set"
   description = "Setting a profile picture helps users recognize your brand."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case

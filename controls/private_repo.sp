@@ -19,7 +19,7 @@ benchmark "private_repo_best_practices" {
 control "private_repo_issues_enabled" {
   title = "Issues should be enabled in each private repository"
   description = "Issues are essential to keep track of tasks, enhancements, and bugs."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -38,7 +38,7 @@ control "private_repo_issues_enabled" {
 control "private_repo_delete_branch_on_merge_enabled" {
   title = "Branches should automatically be deleted after merging in each private repository"
   description = "Automatically delete branches after merging to maintain only your active branches."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -57,7 +57,7 @@ control "private_repo_delete_branch_on_merge_enabled" {
 control "private_repo_no_outside_collaborators" {
   title = "No outside collaborators should have access in each private repository"
   description = "Outside collaborators should not have access to private repository content."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -76,7 +76,7 @@ control "private_repo_no_outside_collaborators" {
 control "private_repo_default_branch_blocks_force_push" {
   title = "Default branch should block force push in each private repository"
   description = "Force pushing modifies commit history and should be avoided on the default branch."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -102,7 +102,7 @@ control "private_repo_default_branch_blocks_force_push" {
 control "private_repo_default_branch_blocks_deletion" {
   title = "Default branch should block deletion in each private repository"
   description = "The default branch is important and definitely shouldn't be deleted."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -128,7 +128,7 @@ control "private_repo_default_branch_blocks_deletion" {
 control "private_repo_default_branch_protections_apply_to_admins" {
   title = "Default branch protections should apply to administrators in each private repository"
   description = "Administrators should have the same restrictions as other users for the default branch."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -154,7 +154,7 @@ control "private_repo_default_branch_protections_apply_to_admins" {
 control "private_repo_default_branch_requires_pull_request_reviews" {
   title = "Default branch requires pull request reviews before merging in each private repository"
   description = "Pull request reviews help improve quality of commits into the default branch."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case

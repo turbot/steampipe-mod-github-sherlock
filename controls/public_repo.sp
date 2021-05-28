@@ -26,7 +26,7 @@ benchmark "public_repo_best_practices" {
 control "public_repo_issues_enabled" {
   title = "Issues should be enabled in each public repository"
   description = "Issues are essential to keep track of tasks, enhancements, and bugs."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -45,7 +45,7 @@ control "public_repo_issues_enabled" {
 control "public_repo_delete_branch_on_merge_enabled" {
   title = "Branches should automatically be deleted after merging in each public repository"
   description = "Automatically delete branches after merging to maintain only your active branches."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -64,7 +64,7 @@ control "public_repo_delete_branch_on_merge_enabled" {
 control "public_repo_license_added" {
   title = "License should be added in each public repository"
   description = "Licensing a public repository makes it easier for others to use and contribute."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -83,7 +83,7 @@ control "public_repo_license_added" {
 control "public_repo_code_of_conduct_added" {
   title = "Code of conduct should be added in each public repository"
   description = "Adding a code of conduct defines standards for how your community engages in an inclusive environment."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -102,7 +102,7 @@ control "public_repo_code_of_conduct_added" {
 control "public_repo_contributing_added" {
   title = "Contributing guidelines should be added in each public repository"
   description = "Adding a contributing guideline defines standards for how the community should contribute to the project."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -122,7 +122,7 @@ control "public_repo_contributing_added" {
 control "public_repo_readme_added" {
   title = "README should be added in each public repository"
   description = "Adding a README provides important information to help inform the community about the project."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -142,7 +142,7 @@ control "public_repo_readme_added" {
 control "public_repo_pull_request_template_added" {
   title = "Pull request template should be added in each public repository"
   description = "Adding a pull request template provides a consistent format for contributors' pull requests."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -162,7 +162,7 @@ control "public_repo_pull_request_template_added" {
 control "public_repo_description_set" {
   title = "Description should be set in each public repository"
   description = "Descriptions should be set to provide the community awareness of what is contained in the public repo."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -181,7 +181,7 @@ control "public_repo_description_set" {
 control "public_repo_website_set" {
   title = "Website URL should be set in each public repository"
   description = "Website URL should be set to provide the community awareness of where they can go for more information about the project."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -200,7 +200,7 @@ control "public_repo_website_set" {
 control "public_repo_topics_set" {
   title = "Topics should be set in each public repository"
   description = "Topics should be set to help others find and contribute to the project."
-  sql = <<EOT
+  sql = <<-EOT
     select
       html_url as resource,
       case
@@ -219,7 +219,7 @@ control "public_repo_topics_set" {
 control "public_repo_default_branch_blocks_force_push" {
   title = "Default branch should block force push in each public repository"
   description = "Force pushing modifies commit history and should be avoided on the default branch."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -245,7 +245,7 @@ control "public_repo_default_branch_blocks_force_push" {
 control "public_repo_default_branch_blocks_deletion" {
   title = "Default branch should block deletion in each public repository"
   description = "The default branch is important and definitely shouldn't be deleted."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -271,7 +271,7 @@ control "public_repo_default_branch_blocks_deletion" {
 control "public_repo_default_branch_protections_apply_to_admins" {
   title = "Default branch protections should apply to administrators in each public repository"
   description = "Administrators should have the same restrictions as other users for the default branch."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
@@ -297,7 +297,7 @@ control "public_repo_default_branch_protections_apply_to_admins" {
 control "public_repo_default_branch_requires_pull_request_reviews" {
   title = "Default branch requires pull request reviews before merging in each public repository"
   description = "Pull request reviews help improve quality of commits into the default branch."
-  sql = <<EOT
+  sql = <<-EOT
     select
       r.full_name as resource,
       case
