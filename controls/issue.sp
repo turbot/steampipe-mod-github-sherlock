@@ -35,7 +35,7 @@ control "issue_has_assignee" {
 }
 
 control "issue_has_labels" {
-  title = "Issues should have lables applied"
+  title = "Issues should have labels applied"
   description = "Labels help organize issues and provide users with more context."
   sql = <<EOT
     select
