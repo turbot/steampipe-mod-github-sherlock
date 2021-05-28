@@ -5,7 +5,7 @@ mod "github_sherlock" {
   color         = "#191717"
   documentation = file("./docs/index.md")
   icon          = "/images/mods/turbot/github-sherlock.svg"
-  categories    = ["GitHub", "Sherlock", "Software Development"]
+  categories    = ["best practices", "github", "sherlock", "software development"]
 
   opengraph {
     title        = "Steampipe Mod to Analyze GitHub"
