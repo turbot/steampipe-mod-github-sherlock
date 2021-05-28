@@ -2,7 +2,7 @@ mod "github_sherlock" {
   # hub metadata
   title         = "GitHub Sherlock"
   description   = "Interrogate your GitHub resources with the help of the world's greatest detectives: Steampipe + Sherlock."
-  color         = "#FF9900"
+  color         = "#191717"
   documentation = file("./docs/index.md")
   icon          = "/images/mods/turbot/github-sherlock.svg"
   categories    = ["GitHub", "Sherlock", "Software Development"]
