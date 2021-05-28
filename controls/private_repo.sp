@@ -68,6 +68,8 @@ control "private_repo_no_outside_collaborators" {
       full_name
     from
       github_my_repository
+    where
+      visibility = 'private' and r.fork = ${local.include_forks}
   EOT
 }
 
