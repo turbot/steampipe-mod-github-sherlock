@@ -5,6 +5,15 @@ detectives: Steampipe + Sherlock. GitHub Sherlock allows you to perform
 deep analysis of your GitHub organization and repo configuration and test 
 them against operations & security best practices.
 
+![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/docs/github-sherlock-output.png?raw=true)
+
+## Current Sherlock Checks
+- [GitHub Organizations best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
+- [Private Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
+- [Public Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
+- [Issue best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
+
+
 ## Quick start
 
 1) Download and install Steampipe (https://steampipe.io/downloads). Or use Brew:
@@ -43,20 +52,12 @@ cd steampipe-mod-github-sherlock
 steampipe check all
 ```
 
-![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/docs/github-sherlock-output.png?raw=true)
-
 You can also run a specific controls by name:
 ```shell
 steampipe check control.public_repo_code_of_conduct_added
 ```
 
-## Current Sherlock Checks
-- [GitHub Organizations best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
-- [Private Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
-- [Public Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
-- [Issue best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
-
-**Use introspection to view the available controls:**:
+Use introspection to view the available controls:
 ```
 steampipe query "select resource_name from steampipe_control;"
 ```
