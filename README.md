@@ -43,7 +43,7 @@ cd steampipe-mod-github-sherlock
 steampipe check all
 ```
 
-![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/issue-3/docs/github-sherlock-output.png?raw=true)
+![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/docs/github-sherlock-output.png?raw=true)
 
 You can also run a specific controls by name:
 ```shell
