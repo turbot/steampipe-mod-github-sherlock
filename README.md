@@ -1,50 +1,69 @@
-![image](https://hub.steampipe.io/images/mods/turbot/github-sherlock-social-graphic.png)
-
-# Steampipe mod to analyze GitHub
+# GitHub Sherlock
 
 Interrogate your GitHub resources with the help of the World's greatest
-detectives: Steampipe + Sherlock. Steampipe's Sherlock mod for GitHub allows
-you to perform deep analysis of your GitHub configuration and test all your
-GitHub resources against operations & security best practices.
-
-*Can you write SQL and HCL? [Fork this repo](#developing) as the basis for your own custom best practice checks!*
-
-* **[Get started →](https://hub.steampipe.io/mods/turbot/github_sherlock)**
-* Documentation: [Controls](https://hub.steampipe.io/mods/turbot/github_sherlock/controls)
-* Community: [Slack Channel](https://join.slack.com/t/steampipe/shared_invite/zt-oij778tv-lYyRTWOTMQYBVAbtPSWs3g)
-* Get involved: [Issues](https://github.com/turbot/steampipe-mod-github-sherlock/issues)
+detectives: Steampipe + Sherlock. GitHub Sherlock allows you to perform 
+deep analysis of your GitHub organization and repo configuration and test 
+them against operations & security best practices.
 
 ## Quick start
 
-Install the GitHub plugin with [Steampipe](https://steampipe.io):
+1) Download and install Steampipe (https://steampipe.io/downloads). Or use Brew:
+
+```shell
+brew tap turbot/tap
+brew install steampipe
+
+steampipe -v 
+steampipe version 0.5.1
+```
+
+2) Install the GitHub plugin:
 ```shell
 steampipe plugin install github
 ```
 
-Clone:
+3) Configure your GitHub creds: [Instructions](https://hub.steampipe.io/plugins/turbot/github#credentials)
+
+`vi ~/.steampipe/config/github.spc`
+```hcl
+connection "github" {
+  plugin = "github"
+  token  = "111222333444555666777888999aaabbbcccddde"
+}
+```
+
+4) Clone this repo and step into the directory:
 ```sh
 git clone git@github.com:turbot/steampipe-mod-github-sherlock
 cd steampipe-mod-github-sherlock
 ```
 
-Run all benchmarks:
+5) Run the checks:
 ```shell
 steampipe check all
 ```
 
-Run a benchmark:
-```shell
-steampipe check benchmark.private_repo_best_practices
-```
+![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/issue-3/docs/github-sherlock-output.png?raw=true)
 
-Run a specific control:
+You can also run a specific controls by name:
 ```shell
 steampipe check control.public_repo_code_of_conduct_added
 ```
 
-## Developing
+## Current Sherlock Checks
+- [GitHub Organizations best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
+- [Private Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
+- [Public Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
+- [Issue best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
 
-Have an idea but aren't sure how to get started?
+**Use introspection to view the available controls:**:
+```
+steampipe query "select resource_name from steampipe_control;"
+```
+
+## Contributing
+
+Have an idea for additional checks or best practices?
 - **[Join our Slack community →](https://join.slack.com/t/steampipe/shared_invite/zt-oij778tv-lYyRTWOTMQYBVAbtPSWs3g)**
 - **[Mod developer guide →](https://steampipe.io/docs/steampipe-mods/writing-mods.md)**
 
@@ -64,23 +83,6 @@ Click on the GitHub Fork Widget. (Don't forget to :star: the repo!)
 git clone git@github.com:YOUR-USERNAME/steampipe-mod-github-sherlock
 cd steampipe-mod-github-sherlock
 ```
-
-**View controls and benchmarks**:
-```
-steampipe query "select resource_name from steampipe_control;"
-```
-
-```sql
-steampipe query
-> select
-    resource_name
-  from
-    steampipe_benchmark
-  order by
-    resource_name;
-```
-
-## Contributing
 
 Thanks for getting involved! We would love to have you [join our Slack community](https://join.slack.com/t/steampipe/shared_invite/zt-oij778tv-lYyRTWOTMQYBVAbtPSWs3g) and hang out with other Steampipe Mod developers.
 
