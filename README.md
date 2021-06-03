@@ -5,7 +5,7 @@ detectives: Steampipe + Sherlock. GitHub Sherlock allows you to perform
 deep analysis of your GitHub organization and repo configuration and test 
 them against operations & security best practices.
 
-![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/docs/github-sherlock-output.png?raw=true)
+![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/docs/github-sherlock-console-output.png?raw=true)
 
 ## Current Sherlock Checks
 - [GitHub Organizations best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
