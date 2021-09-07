@@ -43,7 +43,7 @@ connection "github" {
 
 4) Clone this repo and step into the directory:
 ```sh
-git clone git@github.com:turbot/steampipe-mod-github-sherlock
+git clone https://github.com/turbot/steampipe-mod-github-sherlock.git
 cd steampipe-mod-github-sherlock
 ```
 

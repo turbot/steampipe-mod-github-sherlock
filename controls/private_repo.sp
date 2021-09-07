@@ -69,7 +69,7 @@ control "private_repo_no_outside_collaborators" {
     from
       github_my_repository
     where
-      visibility = 'private' and r.fork = ${local.include_forks}
+      visibility = 'private' and fork = ${local.include_forks}
   EOT
 }
 
