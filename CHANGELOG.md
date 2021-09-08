@@ -1,3 +1,10 @@
+## v0.4 [2021-05-28]
+
+_Bug fixes_
+
+- Duplicate local variables have now been removed across all the files
+- `README` file now includes the correct github url for cloning the repository
+
 ## v0.3 [2021-05-28]
 
 _Bug fixes_
