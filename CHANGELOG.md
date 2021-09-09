@@ -1,3 +1,9 @@
+## v0.4 [2021-09-09]
+
+_Bug fixes_
+
+- Duplicate local variables have now been removed across all the control files
+
 ## v0.3 [2021-05-28]
 
 _Bug fixes_
