@@ -1,7 +1,3 @@
-locals {
-  include_forks = "false"
-}
-
 benchmark "public_repo_best_practices" {
   title = "Public Repository Best Practices"
   description = "Best practices for your public repositories."

@@ -1,7 +1,3 @@
-locals {
-  include_forks = "false"
-}
-
 benchmark "issue_best_practices" {
   title = "Issue Best Practices"
   description = "Best practices for your issues."
