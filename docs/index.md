@@ -29,7 +29,7 @@ steampipe plugin install github
 
 Clone:
 ```sh
-git clone git@github.com:turbot/steampipe-mod-github-sherlock
+git clone https://github.com/turbot/steampipe-mod-github-sherlock.git
 cd steampipe-mod-github-sherlock
 ```
 
