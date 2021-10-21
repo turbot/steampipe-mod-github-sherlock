@@ -6,6 +6,8 @@ repository: "https://github.com/turbot/steampipe-mod-github-sherlock"
 
 Interrogate your GitHub resources with the help of the world's greatest detectives: Steampipe + Sherlock.
 
+![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/docs/github-sherlock-console-output.png)
+
 ## References
 
 [GitHub](https://github.com/) is a provider of Internet hosting for software development and version control using Git.
