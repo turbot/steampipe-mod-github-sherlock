@@ -81,7 +81,7 @@ control "private_repo_default_branch_blocks_force_push" {
     select
       full_name
     from
-      github_my_repository where visibility = 'private' and fork = ${local.include_forks}
+      github_my_repository where visibility = 'public' and fork = ${local.include_forks}
     order by full_name
 ),
  branch_protection as (
@@ -91,7 +91,7 @@ control "private_repo_default_branch_blocks_force_push" {
       allow_force_pushes_enabled
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'private' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
@@ -110,7 +110,7 @@ select
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master') 
+       where branch_name = 'main' or branch_name = 'master'
   EOT
 }
 
@@ -132,7 +132,7 @@ control "private_repo_default_branch_blocks_deletion" {
       allow_deletions_enabled
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'private' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
@@ -151,7 +151,7 @@ select
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master')  
+    where branch_name = 'main' or branch_name = 'master'  
   EOT
 }
 
@@ -170,29 +170,23 @@ control "private_repo_default_branch_protections_apply_to_admins" {
      select
       repository_full_name,
       name as branch_name,
-      enforce_admins_enabled
+      required_pull_request_reviews
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'private' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
       full_name as resource,
       case
-        when enforce_admins_enabled = 'true' then 'ok'
+        when required_pull_request_reviews is not null then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' default branch ' || branch_name ||
-        case
-          when enforce_admins_enabled = 'true' then ' protections apply to admins.'
-          when enforce_admins_enabled = 'false' then ' protections do not apply to admins.'
-          -- If not false or true, then null, which means no branch protection rule exists
-          else ' is not protected.'
-        end as reason,
+      full_name || ' default branch ' || branch_name || case when(required_pull_request_reviews is not null) then ' requires ' else ' does not require ' end || 'pull request reviews.' as reason,
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master')  
+    where branch_name = 'main' or branch_name = 'master'  
   EOT
 }
 
@@ -214,7 +208,7 @@ control "private_repo_default_branch_requires_pull_request_reviews" {
       required_pull_request_reviews
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'private' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
@@ -227,6 +221,6 @@ select
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master')  
+    where branch_name = 'main' or branch_name = 'master'  
   EOT
 }

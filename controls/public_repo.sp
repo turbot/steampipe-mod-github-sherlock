@@ -230,7 +230,7 @@ control "public_repo_default_branch_blocks_force_push" {
       allow_force_pushes_enabled
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'public' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
@@ -249,7 +249,7 @@ select
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master') 
+       where branch_name = 'main' or branch_name = 'master'
   EOT
 }
 
@@ -257,7 +257,7 @@ control "public_repo_default_branch_blocks_deletion" {
   title = "Default branch should block deletion in each public repository"
   description = "The default branch is important and definitely shouldn't be deleted."
   sql = <<-EOT
-    with my_repository AS (
+  with my_repository AS (
     select
       full_name
     from
@@ -271,7 +271,7 @@ control "public_repo_default_branch_blocks_deletion" {
       allow_deletions_enabled
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'public' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
@@ -290,7 +290,7 @@ select
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master')  
+    where branch_name = 'main' or branch_name = 'master'  
   EOT
 }
 
@@ -312,7 +312,7 @@ control "public_repo_default_branch_protections_apply_to_admins" {
       enforce_admins_enabled
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'public' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
@@ -331,7 +331,7 @@ select
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master')  
+    where branch_name = 'main' or branch_name = 'master'  
   EOT
 }
 
@@ -353,7 +353,7 @@ control "public_repo_default_branch_requires_pull_request_reviews" {
       required_pull_request_reviews
     from
       github_branch_protection 
-    where repository_full_name = (select full_name from github_my_repository where visibility = 'public' and fork = ${local.include_forks})
+    where repository_full_name in (select full_name from my_repository)
     order by repository_full_name
  )
 select
@@ -366,6 +366,6 @@ select
       full_name
     from
        my_repository r left join branch_protection p on r. full_name = p.repository_full_name
-    where branch_name in ('main', 'master')  
+    where branch_name = 'main' or branch_name = 'master'  
   EOT
 }
