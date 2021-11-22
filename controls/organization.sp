@@ -25,7 +25,7 @@ control "org_all_seats_used" {
         when plan_filled_seats >= plan_seats then 'ok'
         else 'alarm'
       end as status,
-      name || ' uses ' || plan_filled_seats || ' out of ' || plan_seats || '.' as reason,
+      coalesce(name, login) || ' uses ' || plan_filled_seats || ' out of ' || plan_seats || '.' as reason,
       login
     from
       github_my_organization
@@ -42,7 +42,7 @@ control "org_two_factor_required" {
         when two_factor_requirement_enabled then 'ok'
         else 'alarm'
       end as status,
-      name || case when (two_factor_requirement_enabled)::bool then ' requires 2FA' else ' does not require 2FA' end || '.' as reason,
+      coalesce(name, login) || case when (two_factor_requirement_enabled)::bool then ' requires 2FA' else ' does not require 2FA' end || '.' as reason,
       login
     from
       github_my_organization
@@ -59,7 +59,7 @@ control "org_domain_verified" {
         when is_verified then 'ok'
         else 'alarm'
       end as status,
-      name || ' domain is ' || case when (is_verified)::bool then 'verified' else 'not verified' end || '.' as reason,
+      coalesce(name, login) || ' domain is ' || case when (is_verified)::bool then 'verified' else 'not verified' end || '.' as reason,
       login
     from
       github_my_organization
@@ -76,7 +76,7 @@ control "org_members_cannot_create_public_repos" {
         when members_can_create_public_repos then 'alarm'
         else 'ok'
       end as status,
-      name || ' users ' || case when (members_can_create_public_repos)::bool then 'can ' else 'cannot ' end || 'create public repositories.' as reason,
+      coalesce(name, login) || ' users ' || case when (members_can_create_public_repos)::bool then 'can ' else 'cannot ' end || 'create public repositories.' as reason,
       login
     from
       github_my_organization
@@ -93,7 +93,7 @@ control "org_members_cannot_create_pages" {
         when members_can_create_pages then 'alarm'
         else 'ok'
       end as status,
-      name || ' users ' || case when (members_can_create_pages)::bool then 'can ' else 'cannot ' end || 'create pages.' as reason,
+      coalesce(name, login) || ' users ' || case when (members_can_create_pages)::bool then 'can ' else 'cannot ' end || 'create pages.' as reason,
       login
     from
       github_my_organization
@@ -110,7 +110,7 @@ control "org_email_set" {
         when email is null then 'alarm'
         else 'ok'
       end as status,
-      name || ' email is ' || case when (email is null) then 'not set' else email end || '.' as reason,
+      coalesce(name, login) || ' email is ' || case when (email is null) then 'not set' else email end || '.' as reason,
       login
     from
       github_my_organization
@@ -127,7 +127,7 @@ control "org_homepage_set" {
         when blog is null then 'alarm'
         else 'ok'
       end as status,
-      name || ' homepage is ' || case when (blog is null) then 'not set' else blog end || '.' as reason,
+      coalesce(name, login) || ' homepage is ' || case when (blog is null) then 'not set' else blog end || '.' as reason,
       login
     from
       github_my_organization
@@ -141,10 +141,14 @@ control "org_default_repo_permissions_limited" {
     select
       html_url as resource,
       case
+        when default_repo_permission is null then 'skip'
         when default_repo_permission in ('write', 'admin') then 'alarm'
         else 'ok'
       end as status,
-      name || ' default repository permissions are ' || default_repo_permission || '.' as reason,
+    case
+      when default_repo_permission is null then 'User do not have required permission to query ' || coalesce(name, login) || '.'
+      else coalesce(name, login) || ' default repository permissions are ' || default_repo_permission || '.'
+    end as reason,
       login
     from
       github_my_organization
@@ -161,7 +165,7 @@ control "org_description_set" {
         when description <> '' then 'ok'
         else 'alarm'
       end as status,
-      name || ' description is ' || case when(description <> '') then description else 'not set' end || '.' as reason,
+      coalesce(name, login) || ' description is ' || case when(description <> '') then description else 'not set' end || '.' as reason,
       login
     from
       github_my_organization
@@ -178,7 +182,7 @@ control "org_profile_pic_set" {
         when avatar_url is not null then 'ok'
         else 'alarm'
       end as status,
-      name || ' profile picture URL is ' || case when(avatar_url <> '') then avatar_url else 'not set' end || '.' as reason,
+      coalesce(name, login) || ' profile picture URL is ' || case when(avatar_url <> '') then avatar_url else 'not set' end || '.' as reason,
       login
     from
       github_my_organization
