@@ -61,10 +61,16 @@ control "private_repo_no_outside_collaborators" {
     select
       html_url as resource,
       case
+        when outside_collaborator_logins is null then 'skip'
         when outside_collaborator_logins = '[]' then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' has ' || jsonb_array_length(outside_collaborator_logins) || ' outside collaborator(s).' as reason,
+      case
+      -- <outside_collaborator_logins> access requires elevated role access to repository
+      -- https://docs.github.com/en/organizations/managing-access-to-your-organizations-repositories/repository-roles-for-an-organization
+      when outside_collaborator_logins is null then 'User needs elevated right to query in ' || full_name || ' repo.'
+      else full_name || ' has ' || jsonb_array_length(outside_collaborator_logins) || ' outside collaborator(s).'
+      end as reason,
       full_name
     from
       github_my_repository
@@ -95,7 +101,7 @@ control "private_repo_default_branch_blocks_force_push" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
   EOT
 }
 
@@ -121,7 +127,7 @@ control "private_repo_default_branch_blocks_deletion" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
   EOT
 }
 
@@ -147,7 +153,7 @@ control "private_repo_default_branch_protections_apply_to_admins" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
   EOT
 }
 
@@ -167,6 +173,6 @@ control "private_repo_default_branch_requires_pull_request_reviews" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
   EOT
 }
