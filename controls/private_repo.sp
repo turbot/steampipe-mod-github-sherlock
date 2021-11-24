@@ -61,10 +61,16 @@ control "private_repo_no_outside_collaborators" {
     select
       html_url as resource,
       case
+        when outside_collaborator_logins is null then 'skip'
         when outside_collaborator_logins = '[]' then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' has ' || jsonb_array_length(outside_collaborator_logins) || ' outside collaborator(s).' as reason,
+      case
+      -- <outside_collaborator_logins> access requires elevated role access to repository
+      -- https://docs.github.com/en/organizations/managing-access-to-your-organizations-repositories/repository-roles-for-an-organization
+      when outside_collaborator_logins is null then 'User needs elevated right to query in ' || full_name || ' repo.'
+      else full_name || ' has ' || jsonb_array_length(outside_collaborator_logins) || ' outside collaborator(s).'
+      end as reason,
       full_name
     from
       github_my_repository
