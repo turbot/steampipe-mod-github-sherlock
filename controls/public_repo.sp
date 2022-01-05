@@ -234,7 +234,7 @@ control "public_repo_default_branch_blocks_force_push" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
+      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
   EOT
 }
 
@@ -260,7 +260,7 @@ control "public_repo_default_branch_blocks_deletion" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
+      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
   EOT
 }
 
@@ -286,7 +286,7 @@ control "public_repo_default_branch_protections_apply_to_admins" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
+      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
   EOT
 }
 
@@ -306,6 +306,6 @@ control "public_repo_default_branch_requires_pull_request_reviews" {
       github_my_repository as r
       left join github_branch_protection as b on r.full_name = b.repository_full_name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and (b.name = 'main' or b.name = 'master')
+      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
   EOT
 }
