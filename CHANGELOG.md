@@ -1,3 +1,9 @@
+## v0.6 [2022-01-05]
+
+_Enhancements_
+
+- Updated the inline queries of `private_repo_default_branch_blocks_force_push`, `private_repo_default_branch_blocks_deletion`, `private_repo_default_branch_protections_apply_to_admins`, `private_repo_default_branch_requires_pull_request_reviews`, `public_repo_default_branch_blocks_force_push`, `public_repo_default_branch_blocks_deletion`, `public_repo_default_branch_protections_apply_to_admins` and `public_repo_default_branch_requires_pull_request_reviews` controls to use the `in` operator ([#26](https://github.com/turbot/steampipe-mod-github-sherlock/pull/26))
+
 ## v0.5 [2021-11-24]
 
 _Bug fixes_
