@@ -1,3 +1,9 @@
+## v0.7 [2022-04-29]
+
+_Enhancements_
+
+- Added `category`, `service`, and `type` tags to benchmarks and controls. ([#31](https://github.com/turbot/steampipe-mod-github-sherlock/pull/31))
+
 ## v0.6 [2022-01-05]
 
 _Enhancements_
