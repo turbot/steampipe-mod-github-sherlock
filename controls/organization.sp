@@ -1,3 +1,9 @@
+locals {
+  organization_best_practices_common_tags = merge(local.github_sherlock_common_tags, {
+    service = "GitHub/Organization"
+  })
+}
+
 benchmark "org_best_practices" {
   title = "Organization Best Practices"
   description = "Best practices for your organizations."
@@ -13,11 +19,16 @@ benchmark "org_best_practices" {
     control.org_description_set,
     control.org_profile_pic_set,
   ]
+
+  tags = merge(local.organization_best_practices_common_tags, {
+    type = "Benchmark"
+  })
 }
 
 control "org_all_seats_used" {
-  title = "All organization seats should be allocated"
+  title       = "All organization seats should be allocated"
   description = "Unused organization seats cost money and should be allocated or removed."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -33,8 +44,9 @@ control "org_all_seats_used" {
 }
 
 control "org_two_factor_required" {
-  title = "Two-factor authentication should be required for users in an organization"
+  title       = "Two-factor authentication should be required for users in an organization"
   description = "Two-factor authentication makes it harder for unauthorized actors to access repositories and organizations."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -50,8 +62,9 @@ control "org_two_factor_required" {
 }
 
 control "org_domain_verified" {
-  title = "Domain should be verified in an organization"
+  title       = "Domain should be verified in an organization"
   description = "Verifying your domain helps to confirm the organization's identity and send emails to users with verified emails."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -67,8 +80,9 @@ control "org_domain_verified" {
 }
 
 control "org_members_cannot_create_public_repos" {
-  title = "Organization members should not be able to create public repositories"
+  title       = "Organization members should not be able to create public repositories"
   description = "Accidentally creating a public repository can expose code and other assets."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -84,8 +98,9 @@ control "org_members_cannot_create_public_repos" {
 }
 
 control "org_members_cannot_create_pages" {
-  title = "Organization members should not be able to create pages"
+  title       = "Organization members should not be able to create pages"
   description = "Pages are public and may contain internal or sensitive information."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -101,8 +116,9 @@ control "org_members_cannot_create_pages" {
 }
 
 control "org_email_set" {
-  title = "Organization email should be set"
+  title       = "Organization email should be set"
   description = "Setting an email provides useful contact information for users."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -118,8 +134,9 @@ control "org_email_set" {
 }
 
 control "org_homepage_set" {
-  title = "Organization homepage should be set"
+  title       = "Organization homepage should be set"
   description = "Setting a homepage helps users learn more about your organization."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -135,8 +152,9 @@ control "org_homepage_set" {
 }
 
 control "org_default_repo_permissions_limited" {
-  title = "Organization default repository permissions should be limited"
+  title       = "Organization default repository permissions should be limited"
   description = "Members of your organization should not have write or admin permissions by default in all repositories."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -156,8 +174,9 @@ control "org_default_repo_permissions_limited" {
 }
 
 control "org_description_set" {
-  title = "Organization description should be set"
+  title       = "Organization description should be set"
   description = "Setting a description helps users learn more about your organization."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,
@@ -173,8 +192,9 @@ control "org_description_set" {
 }
 
 control "org_profile_pic_set" {
-  title = "Organization profile picture should be set"
+  title       = "Organization profile picture should be set"
   description = "Setting a profile picture helps users recognize your brand."
+  tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
       html_url as resource,

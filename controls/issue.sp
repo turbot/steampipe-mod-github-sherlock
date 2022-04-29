@@ -1,16 +1,27 @@
+locals {
+  issue_best_practices_common_tags = merge(local.github_sherlock_common_tags, {
+    service = "GitHub/Issue"
+  })
+}
+
 benchmark "issue_best_practices" {
-  title = "Issue Best Practices"
+  title       = "Issue Best Practices"
   description = "Best practices for your issues."
   children = [
     control.issue_has_assignee,
     control.issue_has_labels,
     control.issue_older_30_days
   ]
+
+  tags = merge(local.issue_best_practices_common_tags, {
+    type = "Benchmark"
+  })
 }
 
 control "issue_has_assignee" {
-  title = "Issues should have at least 1 user assigned"
+  title       = "Issues should have at least 1 user assigned"
   description = "Issues should have at least 1 assignee so it's clear who is responsible for it."
+  tags        = local.issue_best_practices_common_tags
   sql = <<-EOT
     select
       i.html_url as resource,
@@ -31,8 +42,9 @@ control "issue_has_assignee" {
 }
 
 control "issue_has_labels" {
-  title = "Issues should have labels applied"
+  title       = "Issues should have labels applied"
   description = "Labels help organize issues and provide users with more context."
+  tags        = local.issue_best_practices_common_tags
   sql = <<-EOT
     select
       i.html_url as resource,
@@ -51,8 +63,9 @@ control "issue_has_labels" {
 }
 
 control "issue_older_30_days" {
-  title = "Issues should not be open longer than 30 days"
+  title       = "Issues should not be open longer than 30 days"
   description = "Issues should be resolved or closed in a timely manner."
+  tags        = local.issue_best_practices_common_tags
   sql = <<-EOT
     select
       i.html_url as resource,
