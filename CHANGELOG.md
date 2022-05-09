@@ -1,3 +1,9 @@
+## v0.8 [2022-05-09]
+
+_Enhancements_
+
+- Updated docs/index.md and README with new dashboard screenshots and latest format. ([#34](https://github.com/turbot/steampipe-mod-github-sherlock/pull/34))
+
 ## v0.7 [2022-04-29]
 
 _Enhancements_
