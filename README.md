@@ -5,90 +5,96 @@ detectives: Steampipe + Sherlock. GitHub Sherlock allows you to perform
 deep analysis of your GitHub organization and repo configuration and test 
 them against operations & security best practices.
 
-![image](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/docs/terminal_session_github_sherlock.png?raw=true)
+Run checks in a dashboard:
+![image](https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_organization_dashboard.png)
 
-## Current Sherlock Checks
-- [GitHub Organizations best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
-- [Private Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
-- [Public Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
-- [Issue best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
+Or in a terminal:
+![image](https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_console_output.png)
 
+## Current Sherlock Checks:
+* [GitHub Organizations best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
+* [Private Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
+* [Public Repo best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
+* [Issue best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
 
-## Quick start
+## Getting started
 
-1) Download and install Steampipe (https://steampipe.io/downloads). Or use Brew:
+### Installation
 
-```shell
+Download and install Steampipe (https://steampipe.io/downloads). Or use Brew:
+
+```sh
 brew tap turbot/tap
 brew install steampipe
-
-steampipe -v 
-steampipe version 0.5.1
 ```
 
-2) Install the GitHub plugin:
-```shell
+Install the GitHub plugin with [Steampipe](https://steampipe.io):
+
+```sh
 steampipe plugin install github
 ```
 
-3) Configure your GitHub creds: [Instructions](https://hub.steampipe.io/plugins/turbot/github#credentials)
+Clone:
 
-`vi ~/.steampipe/config/github.spc`
-```hcl
-connection "github" {
-  plugin = "github"
-  token  = "111222333444555666777888999aaabbbcccddde"
-}
-```
-
-4) Clone this repo and step into the directory:
 ```sh
 git clone https://github.com/turbot/steampipe-mod-github-sherlock.git
 cd steampipe-mod-github-sherlock
 ```
 
-5) Run the checks:
-```shell
+### Usage
+
+Start your dashboard server to get started:
+
+```sh
+steampipe dashboard
+```
+
+By default, the dashboard interface will then be launched in a new browser
+window at https://localhost:9194. From here, you can run benchmarks by
+selecting one or searching for a specific one.
+
+Instead of running benchmarks in a dashboard, you can also run them within your
+terminal with the `steampipe check` command:
+
+Run all benchmarks:
+
+```sh
 steampipe check all
 ```
 
-You can also run a specific controls by name:
-```shell
-steampipe check control.public_repo_code_of_conduct_added
+Run a single benchmark:
+
+```sh
+steampipe check benchmark.org_best_practices
 ```
 
-Use introspection to view the available controls:
+Run a specific control:
+
+```sh
+steampipe check control.org_two_factor_required
 ```
-steampipe query "select resource_name from steampipe_control;"
-```
+
+Different output formats are also available, for more information please see
+[Output Formats](https://steampipe.io/docs/reference/cli/check#output-formats).
+
+
+### Credentials
+
+This mod uses the credentials configured in the [Steampipe GitHub plugin](https://hub.steampipe.io/plugins/turbot/github).
+
+### Configuration
+
+No extra configuration is required.
 
 ## Contributing
 
-Have an idea for additional checks or best practices?
-- **[Join our Slack community →](https://join.slack.com/t/steampipe/shared_invite/zt-oij778tv-lYyRTWOTMQYBVAbtPSWs3g)**
-- **[Mod developer guide →](https://steampipe.io/docs/steampipe-mods/writing-mods.md)**
+If you have an idea for additional controls or just want to help maintain and extend this mod ([or others](https://github.com/topics/steampipe-mod)) we would love you to join the community and start contributing.
 
-**Prerequisites**:
-- [Steampipe installed](https://steampipe.io/downloads)
-- Steampipe GitHub plugin installed (see above)
+- **[Join our Slack community →](https://steampipe.io/community/join)** and hang out with other Mod developers.
 
-**Fork**:
-Click on the GitHub Fork Widget. (Don't forget to :star: the repo!)
+Please see the [contribution guidelines](https://github.com/turbot/steampipe/blob/main/CONTRIBUTING.md) and our [code of conduct](https://github.com/turbot/steampipe/blob/main/CODE_OF_CONDUCT.md). All contributions are subject to the [Apache 2.0 open source license](https://github.com/turbot/steampipe-mod-github-sherlock/blob/main/LICENSE).
 
-**Clone**:
+Want to help but not sure where to start? Pick up one of the `help wanted` issues:
 
-1. Change the current working directory to the location where you want to put the cloned directory on your local filesystem.
-2. Type the clone command below inserting your GitHub username instead of `YOUR-USERNAME`:
-
-```sh
-git clone git@github.com:YOUR-USERNAME/steampipe-mod-github-sherlock
-cd steampipe-mod-github-sherlock
-```
-
-Thanks for getting involved! We would love to have you [join our Slack community](https://join.slack.com/t/steampipe/shared_invite/zt-oij778tv-lYyRTWOTMQYBVAbtPSWs3g) and hang out with other Steampipe Mod developers.
-
-Please see the [contribution guidelines](https://github.com/turbot/steampipe/blob/main/CONTRIBUTING.md) and our [code of conduct](https://github.com/turbot/steampipe/blob/main/CODE_OF_CONDUCT.md). All contributions are subject to the [Apache 2.0 open source license](https://github.com/turbot/steampipe-mod-aws-compliance/blob/main/LICENSE).
-
-`help wanted` issues:
 - [Steampipe](https://github.com/turbot/steampipe/labels/help%20wanted)
-- [GitHub Sherlock Mod](https://github.com/turbot/steampipe-mod-github-sherlock/labels/help%20wanted)
+- [GitHub Compliance Mod](https://github.com/turbot/steampipe-mod-github-sherlock/labels/help%20wanted)
