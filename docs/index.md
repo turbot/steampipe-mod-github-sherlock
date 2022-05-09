@@ -102,4 +102,4 @@ Please see the [contribution guidelines](https://github.com/turbot/steampipe/blo
 Want to help but not sure where to start? Pick up one of the `help wanted` issues:
 
 - [Steampipe](https://github.com/turbot/steampipe/labels/help%20wanted)
-- [GitHub Compliance Mod](https://github.com/turbot/steampipe-mod-github-sherlock/labels/help%20wanted)
+- [GitHub Sherlock Mod](https://github.com/turbot/steampipe-mod-github-sherlock/labels/help%20wanted)
