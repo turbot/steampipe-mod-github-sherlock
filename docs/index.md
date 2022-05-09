@@ -83,7 +83,6 @@ steampipe check control.org_two_factor_required
 Different output formats are also available, for more information please see
 [Output Formats](https://steampipe.io/docs/reference/cli/check#output-formats).
 
-
 ### Credentials
 
 This mod uses the credentials configured in the [Steampipe GitHub plugin](https://hub.steampipe.io/plugins/turbot/github).

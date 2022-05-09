@@ -1,8 +1,8 @@
 # GitHub Sherlock
 
 Interrogate your GitHub resources with the help of the World's greatest
-detectives: Steampipe + Sherlock. GitHub Sherlock allows you to perform 
-deep analysis of your GitHub organization and repo configuration and test 
+detectives: Steampipe + Sherlock. GitHub Sherlock allows you to perform
+deep analysis of your GitHub organization and repo configuration and test
 them against operations & security best practices.
 
 Run checks in a dashboard:
@@ -76,7 +76,6 @@ steampipe check control.org_two_factor_required
 
 Different output formats are also available, for more information please see
 [Output Formats](https://steampipe.io/docs/reference/cli/check#output-formats).
-
 
 ### Credentials
 
