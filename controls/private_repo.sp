@@ -109,9 +109,9 @@ control "private_repo_default_branch_blocks_force_push" {
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks}
   EOT
 }
 
@@ -135,9 +135,9 @@ control "private_repo_default_branch_blocks_deletion" {
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks}
   EOT
 }
 
@@ -162,9 +162,9 @@ control "private_repo_default_branch_protections_apply_to_admins" {
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks}
   EOT
 }
 
@@ -183,8 +183,8 @@ control "private_repo_default_branch_requires_pull_request_reviews" {
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'private' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'private' and r.fork = ${local.include_forks}
   EOT
 }
