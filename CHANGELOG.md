@@ -1,3 +1,18 @@
+## v0.9 [2022-06-28]
+
+_Enhancements_
+
+- Updated the following controls to check protections for all default branches, not just `main` or `master`: ([#36](https://github.com/turbot/steampipe-mod-github-sherlock/pull/36))
+  - `private_repo_default_branch_blocks_deletion`
+  - `private_repo_default_branch_blocks_force_push`
+  - `private_repo_default_branch_protections_apply_to_admins`
+  - `private_repo_default_branch_requires_pull_request_reviews`
+  - `public_repo_default_branch_blocks_deletion`
+  - `public_repo_default_branch_blocks_force_push`
+  - `public_repo_default_branch_protections_apply_to_admins`
+  - `public_repo_default_branch_requires_pull_request_reviews`
+- Thanks to [@francois2metz](https://github.com/francois2metz) for the enhancements above!
+
 ## v0.8 [2022-05-09]
 
 _Enhancements_
