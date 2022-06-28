@@ -243,7 +243,7 @@ control "public_repo_default_branch_blocks_force_push" {
         when b.allow_force_pushes_enabled = 'false' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || b.name ||
+      r.full_name || ' default branch ' || r.default_branch ||
         case
           when b.allow_force_pushes_enabled = 'false' then ' prevents force push.'
           when b.allow_force_pushes_enabled = 'true' then ' allows force push.'
@@ -253,9 +253,9 @@ control "public_repo_default_branch_blocks_force_push" {
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'public' and r.fork = ${local.include_forks}
   EOT
 }
 
@@ -270,7 +270,7 @@ control "public_repo_default_branch_blocks_deletion" {
         when b.allow_deletions_enabled = 'false' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || b.name ||
+      r.full_name || ' default branch ' || r.default_branch ||
         case
           when b.allow_deletions_enabled = 'false' then ' prevents deletion.'
           when b.allow_deletions_enabled = 'true' then ' allows deletion.'
@@ -280,9 +280,9 @@ control "public_repo_default_branch_blocks_deletion" {
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'public' and r.fork = ${local.include_forks}
   EOT
 }
 
@@ -297,7 +297,7 @@ control "public_repo_default_branch_protections_apply_to_admins" {
         when b.enforce_admins_enabled = 'true' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || b.name ||
+      r.full_name || ' default branch ' || r.default_branch ||
         case
           when b.enforce_admins_enabled = 'true' then ' protections apply to admins.'
           when b.enforce_admins_enabled = 'false' then ' protections do not apply to admins.'
@@ -307,9 +307,9 @@ control "public_repo_default_branch_protections_apply_to_admins" {
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'public' and r.fork = ${local.include_forks}
   EOT
 }
 
@@ -324,12 +324,12 @@ control "public_repo_default_branch_requires_pull_request_reviews" {
         when b.required_pull_request_reviews is not null then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || b.name || case when(b.required_pull_request_reviews is not null) then ' requires ' else ' does not require ' end || 'pull request reviews.' as reason,
+      r.full_name || ' default branch ' || r.default_branch || case when(b.required_pull_request_reviews is not null) then ' requires ' else ' does not require ' end || 'pull request reviews.' as reason,
       r.full_name
     from
       github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name
+      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
     where
-      visibility = 'public' and r.fork = ${local.include_forks} and b.name in ('main', 'master')
+      visibility = 'public' and r.fork = ${local.include_forks}
   EOT
 }
