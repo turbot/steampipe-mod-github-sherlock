@@ -1,4 +1,4 @@
-# GitHub Sherlock
+# GitHub Sherlock Mod for Steampipe
 
 Interrogate your GitHub resources with the help of the World's greatest
 detectives: Steampipe + Sherlock. GitHub Sherlock allows you to perform
