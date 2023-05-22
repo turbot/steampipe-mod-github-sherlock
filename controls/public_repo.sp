@@ -35,17 +35,17 @@ control "public_repo_issues_enabled" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when has_issues then 'ok'
+        when has_issues_enabled then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' issues are ' || case when(has_issues)::bool then 'enabled' else 'disabled' end || '.' as reason,
-      full_name
+      name_with_owner || ' issues are ' || case when(has_issues_enabled)::bool then 'enabled' else 'disabled' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'public' and fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -55,17 +55,17 @@ control "public_repo_delete_branch_on_merge_enabled" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when delete_branch_on_merge then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' delete branch on merge is ' || case when(delete_branch_on_merge)::bool then 'enabled' else 'disabled' end || '.' as reason,
-      full_name
+      name_with_owner || ' delete branch on merge is ' || case when(delete_branch_on_merge)::bool then 'enabled' else 'disabled' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'public' and fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -75,17 +75,17 @@ control "public_repo_license_added" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when license_spdx_id is not null then 'ok'
+        when license_info is not null then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' license is ' || case when(license_spdx_id is not null) then license_name else 'not added' end || '.' as reason,
-      full_name
+      name_with_owner || ' license is ' || case when (license_info is not null) then (license_info ->> 'spdx_id') else 'not added' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'public' and fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -95,19 +95,20 @@ control "public_repo_code_of_conduct_added" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when code_of_conduct_key not like 'none' then 'ok'
+        when code_of_conduct is not null then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' code of conduct is ' || case when(code_of_conduct_key is not null) then code_of_conduct_name else 'not added' end || '.' as reason,
-      full_name
+      name_with_owner || ' code of conduct is ' || case when (code_of_conduct is not null) then (code_of_conduct ->> 'name') else 'not added' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'public' and fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
+
 
 control "public_repo_contributing_added" {
   title       = "Contributing guidelines should be added in each public repository"
@@ -115,18 +116,18 @@ control "public_repo_contributing_added" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      r.url as resource,
       case
         when p.contributing is not null then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || case when(p.contributing is not null) then ' has ' else ' has no ' end || 'contributing guidelines.' as reason,
-      r.full_name
+      r.name_with_owner || case when (p.contributing is not null) then ' has ' else ' has no ' end || 'contributing guidelines.' as reason,
+      r.name_with_owner
     from
       github_my_repository as r
-      left join github_community_profile as p on r.full_name = p.repository_full_name
+      left join github_community_profile as p on r.name_with_owner = p.repository_full_name
     where
-      visibility = 'public' and r.fork = ${local.include_forks}
+      visibility = 'PUBLIC' and r.is_fork = ${local.include_forks}
   EOT
 }
 
@@ -136,18 +137,18 @@ control "public_repo_readme_added" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      r.url as resource,
       case
         when p.readme is not null then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || case when(p.readme is not null) then ' has a ' else ' has no ' end || 'README.' as reason,
-      r.full_name
+      r.name_with_owner || case when (p.readme is not null) then ' has a ' else ' has no ' end || 'README.' as reason,
+      r.name_with_owner
     from
       github_my_repository as r
-      left join github_community_profile as p on r.full_name = p.repository_full_name
+      left join github_community_profile as p on r.name_with_owner = p.repository_full_name
     where
-      visibility = 'public' and r.fork = ${local.include_forks}
+      visibility = 'PUBLIC' and r.is_fork = ${local.include_forks}
   EOT
 }
 
@@ -157,18 +158,17 @@ control "public_repo_pull_request_template_added" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when p.pull_request_template is not null then 'ok'
+        when pull_request_templates <> '[]' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || case when(p.pull_request_template is not null) then ' has a ' else ' has no ' end || 'pull request template.' as reason,
-      r.full_name
+      name_with_owner || case when (pull_request_templates <> '[]') then ' has a ' else ' has no ' end || 'pull request template.' as reason,
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_community_profile as p on r.full_name = p.repository_full_name
+      github_my_repository
     where
-      visibility = 'public' and r.fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -178,17 +178,17 @@ control "public_repo_description_set" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when description <> '' then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' description is ' || case when(description <> '') then description else 'not set' end || '.' as reason,
-      full_name
+      name_with_owner || ' description is ' || case when (description <> '') then description else 'not set' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'public' and fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -198,17 +198,17 @@ control "public_repo_website_set" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when homepage is not null then 'ok'
+        when homepage_url <> '' then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' homepage is ' || case when (homepage is not null) then homepage else 'not set' end || '.' as reason,
-      full_name
+      name_with_owner || ' homepage is ' || case when (homepage_url <> '') then homepage_url else 'not set' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'public' and fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -218,17 +218,17 @@ control "public_repo_topics_set" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when topics <> '[]' then 'ok'
+        when repository_topics_total_count > 0 then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' has ' || jsonb_array_length(topics) || ' topic(s).' as reason,
-      full_name
+      name_with_owner || ' has ' || repository_topics_total_count || ' topic(s).' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'public' and fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -238,24 +238,23 @@ control "public_repo_default_branch_blocks_force_push" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.allow_force_pushes_enabled = 'false' then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'false' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch ||
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') ||
         case
-          when b.allow_force_pushes_enabled = 'false' then ' prevents force push.'
-          when b.allow_force_pushes_enabled = 'true' then ' allows force push.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'false' then ' prevents force push.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'true' then ' allows force push.'
           -- If not false or true, then null, which means no branch protection rule exists
           else ' is not protected.'
         end as reason,
-      r.full_name
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'public' and r.fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -265,24 +264,23 @@ control "public_repo_default_branch_blocks_deletion" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.allow_deletions_enabled = 'false' then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'false' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch ||
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') ||
         case
-          when b.allow_deletions_enabled = 'false' then ' prevents deletion.'
-          when b.allow_deletions_enabled = 'true' then ' allows deletion.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'false' then ' prevents deletion.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'true' then ' allows deletion.'
           -- If not false or true, then null, which means no branch protection rule exists
           else ' is not protected.'
         end as reason,
-      r.full_name
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'public' and r.fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -292,24 +290,23 @@ control "public_repo_default_branch_protections_apply_to_admins" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.enforce_admins_enabled = 'true' then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'true' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch ||
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') ||
         case
-          when b.enforce_admins_enabled = 'true' then ' protections apply to admins.'
-          when b.enforce_admins_enabled = 'false' then ' protections do not apply to admins.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'true' then ' protections apply to admins.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'false' then ' protections do not apply to admins.'
           -- If not false or true, then null, which means no branch protection rule exists
           else ' is not protected.'
         end as reason,
-      r.full_name
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'public' and r.fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -319,17 +316,17 @@ control "public_repo_default_branch_requires_pull_request_reviews" {
   tags        = local.public_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.required_pull_request_reviews is not null then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'requires_approving_reviews') = 'true' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch || case when(b.required_pull_request_reviews is not null) then ' requires ' else ' does not require ' end || 'pull request reviews.' as reason,
-      r.full_name
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') || 
+        case when (default_branch_ref -> 'branch_protection_rule' ->> 'requires_approving_reviews') = 'true' then ' requires ' else ' does not require ' end || 'pull request reviews.' as reason,
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'public' and r.fork = ${local.include_forks}
+      visibility = 'PUBLIC' and is_fork = ${local.include_forks}
   EOT
 }

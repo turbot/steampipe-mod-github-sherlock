@@ -29,17 +29,17 @@ control "private_repo_issues_enabled" {
   tags        = local.private_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when has_issues then 'ok'
+        when has_issues_enabled then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' issues are ' || case when(has_issues)::bool then 'enabled' else 'disabled' end || '.' as reason,
-      full_name
+      name_with_owner || ' issues are ' || case when(has_issues_enabled)::bool then 'enabled' else 'disabled' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'private' and fork = ${local.include_forks}
+      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -49,17 +49,17 @@ control "private_repo_delete_branch_on_merge_enabled" {
   tags        = local.private_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when delete_branch_on_merge then 'ok'
         else 'alarm'
       end as status,
-      full_name || ' delete branch on merge is ' || case when(delete_branch_on_merge)::bool then 'enabled' else 'disabled' end || '.' as reason,
-      full_name
+      name_with_owner || ' delete branch on merge is ' || case when(delete_branch_on_merge)::bool then 'enabled' else 'disabled' end || '.' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'private' and fork = ${local.include_forks}
+      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -68,23 +68,17 @@ control "private_repo_no_outside_collaborators" {
   description = "Outside collaborators should not have access to private repository content."
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when outside_collaborator_logins is null then 'skip'
-        when outside_collaborator_logins = '[]' then 'ok'
+        when outside_collaborator_total_count = 0 then 'ok'
         else 'alarm'
       end as status,
-      case
-      -- <outside_collaborator_logins> access requires elevated role access to repository
-      -- https://docs.github.com/en/organizations/managing-access-to-your-organizations-repositories/repository-roles-for-an-organization
-      when outside_collaborator_logins is null then 'User needs elevated right to query in ' || full_name || ' repo.'
-      else full_name || ' has ' || jsonb_array_length(outside_collaborator_logins) || ' outside collaborator(s).'
-      end as reason,
-      full_name
+      name_with_owner || ' has ' || outside_collaborator_total_count || ' outside collaborator(s).' as reason,
+      name_with_owner
     from
       github_my_repository
     where
-      visibility = 'private' and fork = ${local.include_forks}
+      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -94,24 +88,23 @@ control "private_repo_default_branch_blocks_force_push" {
   tags        = local.private_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.allow_force_pushes_enabled = 'false' then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'false' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch ||
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') ||
         case
-          when b.allow_force_pushes_enabled = 'false' then ' prevents force push.'
-          when b.allow_force_pushes_enabled = 'true' then ' allows force push.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'false' then ' prevents force push.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'true' then ' allows force push.'
           -- If not false or true, then null, which means no branch protection rule exists
           else ' is not protected.'
         end as reason,
-      r.full_name
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'private' and r.fork = ${local.include_forks}
+      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -120,24 +113,23 @@ control "private_repo_default_branch_blocks_deletion" {
   description = "The default branch is important and definitely shouldn't be deleted."
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.allow_deletions_enabled = 'false' then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'false' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch ||
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') ||
         case
-          when b.allow_deletions_enabled = 'false' then ' prevents deletion.'
-          when b.allow_deletions_enabled = 'true' then ' allows deletion.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'false' then ' prevents deletion.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'true' then ' allows deletion.'
           -- If not false or true, then null, which means no branch protection rule exists
           else ' is not protected.'
         end as reason,
-      r.full_name
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'private' and r.fork = ${local.include_forks}
+      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -147,24 +139,23 @@ control "private_repo_default_branch_protections_apply_to_admins" {
   tags        = local.private_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.enforce_admins_enabled = 'true' then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'true' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch ||
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') ||
         case
-          when b.enforce_admins_enabled = 'true' then ' protections apply to admins.'
-          when b.enforce_admins_enabled = 'false' then ' protections do not apply to admins.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'true' then ' protections apply to admins.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'false' then ' protections do not apply to admins.'
           -- If not false or true, then null, which means no branch protection rule exists
           else ' is not protected.'
         end as reason,
-      r.full_name
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'private' and r.fork = ${local.include_forks}
+      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
   EOT
 }
 
@@ -174,17 +165,17 @@ control "private_repo_default_branch_requires_pull_request_reviews" {
   tags        = local.private_repo_best_practices_common_tags
   sql = <<-EOT
     select
-      r.full_name as resource,
+      url as resource,
       case
-        when b.required_pull_request_reviews is not null then 'ok'
+        when (default_branch_ref -> 'branch_protection_rule' ->> 'requires_approving_reviews') = 'true' then 'ok'
         else 'alarm'
       end as status,
-      r.full_name || ' default branch ' || r.default_branch || case when(b.required_pull_request_reviews is not null) then ' requires ' else ' does not require ' end || 'pull request reviews.' as reason,
-      r.full_name
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') || 
+        case when (default_branch_ref -> 'branch_protection_rule' ->> 'requires_approving_reviews') = 'true' then ' requires ' else ' does not require ' end || 'pull request reviews.' as reason,
+      name_with_owner
     from
-      github_my_repository as r
-      left join github_branch_protection as b on r.full_name = b.repository_full_name and r.default_branch = b.name
+      github_my_repository
     where
-      visibility = 'private' and r.fork = ${local.include_forks}
+      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
   EOT
 }

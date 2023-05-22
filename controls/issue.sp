@@ -24,20 +24,20 @@ control "issue_has_assignee" {
   tags        = local.issue_best_practices_common_tags
   sql = <<-EOT
     select
-      i.html_url as resource,
+      i.url as resource,
       case
-        when jsonb_array_length(i.assignee_logins) < 1 then 'alarm'
-        when jsonb_array_length(i.assignee_logins) = 1 then 'ok'
+        when assignees_total_count = 0 then 'alarm'
+        when assignees_total_count = 1 then 'ok'
         -- More than 1 assignee could be ok, but let users know there's more than 1
         else 'info'
       end as status,
-      '#' || i.issue_number || ' ' || i.title || ' has ' || jsonb_array_length(i.assignee_logins) || ' assignee(s).' as reason,
+      '#' || i.number || ' ' || i.title || ' has ' || assignees_total_count || ' assignee(s).' as reason,
       i.repository_full_name
     from
       github_my_repository as r
-      left join github_issue as i on r.full_name = i.repository_full_name
+      left join github_issue as i on r.name_with_owner = i.repository_full_name
     where
-      r.fork = ${local.include_forks} and i.state = 'open'
+      r.is_fork = ${local.include_forks} and i.state = 'OPEN'
   EOT
 }
 
@@ -47,18 +47,18 @@ control "issue_has_labels" {
   tags        = local.issue_best_practices_common_tags
   sql = <<-EOT
     select
-      i.html_url as resource,
+      i.url as resource,
       case
-        when i.labels <> '[]' then 'ok'
+        when i.labels_total_count > 0 then 'ok'
         else 'alarm'
       end as status,
-      '#' || i.issue_number || ' ' || i.title || ' has ' || jsonb_array_length(i.labels) || ' label(s).' as reason,
+      '#' || i.number || ' ' || i.title || ' has ' || i.labels_total_count || ' label(s).' as reason,
       i.repository_full_name
     from
       github_my_repository as r
-      left join github_issue as i on r.full_name = i.repository_full_name
+      left join github_issue as i on r.name_with_owner = i.repository_full_name
     where
-      r.fork = ${local.include_forks} and i.state = 'open'
+      r.is_fork = ${local.include_forks} and i.state = 'OPEN'
   EOT
 }
 
@@ -68,18 +68,18 @@ control "issue_older_30_days" {
   tags        = local.issue_best_practices_common_tags
   sql = <<-EOT
     select
-      i.html_url as resource,
+      i.url as resource,
       case
         when i.created_at <= (current_date - interval '30' day) then 'alarm'
         else 'ok'
       end as status,
-      '#' || i.issue_number || ' ' || i.title || ' created ' || to_char(i.created_at , 'DD-Mon-YYYY') ||
+      '#' || i.number || ' ' || i.title || ' created ' || to_char(i.created_at , 'DD-Mon-YYYY') ||
         ' (' || extract(day from current_timestamp - i.created_at) || ' days).' as reason,
       i.repository_full_name
     from
       github_my_repository as r
-      left join github_issue as i on r.full_name = i.repository_full_name
+      left join github_issue as i on r.name_with_owner = i.repository_full_name
     where
-      r.fork = ${local.include_forks} and i.state = 'open'
+      r.is_fork = ${local.include_forks} and i.state = 'OPEN'
   EOT
 }
