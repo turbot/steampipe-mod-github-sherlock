@@ -147,12 +147,13 @@ control "org_homepage_set" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when blog is null then 'alarm'
+        when website_url is null then 'alarm'
+        when website_url = '' then 'alarm'
         else 'ok'
       end as status,
-      coalesce(name, login) || ' homepage is ' || case when (blog is null) then 'not set' else blog end || '.' as reason,
+      coalesce(name, login) || ' homepage is ' || case when (website_url is null) then 'not set' when (website_url = '') then 'not set' else website_url end || '.' as reason,
       login
     from
       github_my_organization
