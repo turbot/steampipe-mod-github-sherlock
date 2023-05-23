@@ -70,10 +70,10 @@ control "private_repo_no_outside_collaborators" {
     select
       url as resource,
       case
-        when outside_collaborator_total_count = 0 then 'ok'
+        when outside_collaborators_total_count = 0 then 'ok'
         else 'alarm'
       end as status,
-      name_with_owner || ' has ' || outside_collaborator_total_count || ' outside collaborator(s).' as reason,
+      name_with_owner || ' has ' || outside_collaborators_total_count || ' outside collaborator(s).' as reason,
       name_with_owner
     from
       github_my_repository
