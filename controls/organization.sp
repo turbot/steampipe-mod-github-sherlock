@@ -8,12 +8,12 @@ benchmark "org_best_practices" {
   title = "Organization Best Practices"
   description = "Best practices for your organizations."
   children = [
-    // control.org_all_seats_used,
+    control.org_all_seats_used,
     control.org_two_factor_required,
-    // control.org_members_cannot_create_public_repos,
-    // control.org_members_cannot_create_pages,
+    control.org_members_cannot_create_public_repos,
+    control.org_members_cannot_create_pages,
     control.org_domain_verified,
-    // control.org_default_repo_permissions_limited,
+    control.org_default_repo_permissions_limited,
     control.org_email_set,
     control.org_homepage_set,
     control.org_description_set,
@@ -24,25 +24,25 @@ benchmark "org_best_practices" {
     type = "Benchmark"
   })
 }
-/*
+
 control "org_all_seats_used" {
   title       = "All organization seats should be allocated"
   description = "Unused organization seats cost money and should be allocated or removed."
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when plan_filled_seats >= plan_seats then 'ok'
         else 'alarm'
       end as status,
-      coalesce(name, login) || ' uses ' || plan_filled_seats || ' out of ' || plan_seats || '.' as reason,
+      login || ' uses ' || plan_filled_seats || ' out of ' || plan_seats || '.' as reason,
       login
     from
-      github_my_organization
+      github_my_organization_v3
   EOT
 }
-*/
+
 control "org_two_factor_required" {
   title       = "Two-factor authentication should be required for users in an organization"
   description = "Two-factor authentication makes it harder for unauthorized actors to access repositories and organizations."
@@ -85,22 +85,22 @@ control "org_domain_verified" {
       github_my_organization
   EOT
 }
-/*
+
 control "org_members_cannot_create_public_repos" {
   title       = "Organization members should not be able to create public repositories"
   description = "Accidentally creating a public repository can expose code and other assets."
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when members_can_create_public_repos then 'alarm'
         else 'ok'
       end as status,
-      coalesce(name, login) || ' users ' || case when (members_can_create_public_repos)::bool then 'can ' else 'cannot ' end || 'create public repositories.' as reason,
+      login || ' users ' || case when (members_can_create_public_repos)::bool then 'can ' else 'cannot ' end || 'create public repositories.' as reason,
       login
     from
-      github_my_organization
+      github_my_organization_v3
   EOT
 }
 
@@ -110,18 +110,18 @@ control "org_members_cannot_create_pages" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when members_can_create_pages then 'alarm'
         else 'ok'
       end as status,
-      coalesce(name, login) || ' users ' || case when (members_can_create_pages)::bool then 'can ' else 'cannot ' end || 'create pages.' as reason,
+      login || ' users ' || case when (members_can_create_pages)::bool then 'can ' else 'cannot ' end || 'create pages.' as reason,
       login
     from
-      github_my_organization
+      github_my_organization_v3
   EOT
 }
-*/
+
 control "org_email_set" {
   title       = "Organization email should be set"
   description = "Setting an email provides useful contact information for users."
@@ -160,29 +160,27 @@ control "org_homepage_set" {
   EOT
 }
 
-/*
 control "org_default_repo_permissions_limited" {
   title       = "Organization default repository permissions should be limited"
   description = "Members of your organization should not have write or admin permissions by default in all repositories."
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when default_repo_permission is null then 'skip'
         when default_repo_permission in ('write', 'admin') then 'alarm'
         else 'ok'
       end as status,
     case
-      when default_repo_permission is null then 'User do not have required permission to query ' || coalesce(name, login) || '.'
-      else coalesce(name, login) || ' default repository permissions are ' || default_repo_permission || '.'
+      when default_repo_permission is null then 'User do not have required permission to query ' || login || '.'
+      else login || ' default repository permissions are ' || default_repo_permission || '.'
     end as reason,
       login
     from
-      github_my_organization
+      github_my_organization_v3
   EOT
 }
-*/
 
 control "org_description_set" {
   title       = "Organization description should be set"
