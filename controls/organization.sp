@@ -49,22 +49,21 @@ control "org_two_factor_required" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      mo.url as resource,
+      url as resource,
       case
-        when oo.requires_two_factor_authentication is null then 'skip'
-        when (oo.requires_two_factor_authentication)::bool then 'ok'
+        when two_factor_requirement_enabled is null then 'info'
+        when two_factor_requirement_enabled then 'ok'
         else 'alarm'
       end as status,
-      coalesce(mo.name, mo.login) || 
+      login || 
         case 
-          when oo.requires_two_factor_authentication is null then ' insufficient permissions to check'
-          when (oo.requires_two_factor_authentication)::bool then ' requires 2FA' else ' does not require 2FA' end || '.' as reason,
-      mo.login
+          when two_factor_requirement_enabled is null then ' insufficient permissions to check'
+          when (two_factor_requirement_enabled)::bool then ' requires 2FA' 
+          else ' does not require 2FA' 
+        end || '.' as reason,
+      login
     from
-      github_my_organization as mo
-    inner join
-      github_organization_owner as oo
-    on mo.login = oo.login
+      github_my_organization_v3
   EOT
 }
 
