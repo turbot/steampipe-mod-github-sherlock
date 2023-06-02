@@ -39,7 +39,7 @@ control "org_all_seats_used" {
       login || ' uses ' || plan_filled_seats || ' out of ' || plan_seats || '.' as reason,
       login
     from
-      github_my_organization_v3
+      github_my_organization
   EOT
 }
 
@@ -63,7 +63,7 @@ control "org_two_factor_required" {
         end || '.' as reason,
       login
     from
-      github_my_organization_v3
+      github_my_organization
   EOT
 }
 
@@ -99,7 +99,7 @@ control "org_members_cannot_create_public_repos" {
       login || ' users ' || case when (members_can_create_public_repos)::bool then 'can ' else 'cannot ' end || 'create public repositories.' as reason,
       login
     from
-      github_my_organization_v3
+      github_my_organization
   EOT
 }
 
@@ -117,7 +117,7 @@ control "org_members_cannot_create_pages" {
       login || ' users ' || case when (members_can_create_pages)::bool then 'can ' else 'cannot ' end || 'create pages.' as reason,
       login
     from
-      github_my_organization_v3
+      github_my_organization
   EOT
 }
 
@@ -177,7 +177,7 @@ control "org_default_repo_permissions_limited" {
     end as reason,
       login
     from
-      github_my_organization_v3
+      github_my_organization
   EOT
 }
 
