@@ -21,4 +21,10 @@ mod "github_sherlock" {
     description = "Interrogate your GitHub resources with the help of the world's greatest detectives: Steampipe + Sherlock."
     image       = "/images/mods/turbot/github-sherlock-social-graphic.png"
   }
+
+  require {
+    plugin "github" {
+      version = "0.28.0"
+    }
+  }
 }
