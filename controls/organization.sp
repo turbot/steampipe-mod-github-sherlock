@@ -55,11 +55,11 @@ control "org_two_factor_required" {
         when two_factor_requirement_enabled then 'ok'
         else 'alarm'
       end as status,
-      login || 
-        case 
-          when two_factor_requirement_enabled is null then ' insufficient permissions to check'
-          when (two_factor_requirement_enabled)::bool then ' requires 2FA' 
-          else ' does not require 2FA' 
+      login ||
+        case
+          when two_factor_requirement_enabled is null then ' 2FA requirement unverifiable'
+          when (two_factor_requirement_enabled)::bool then ' requires 2FA'
+          else ' does not require 2FA'
         end || '.' as reason,
       login
     from
