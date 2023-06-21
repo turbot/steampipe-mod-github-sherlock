@@ -1,3 +1,13 @@
+## v0.10 [2023-06-21]
+
+_What's new?_
+
+- All queries have been updated to work with GitHub plugin v0.28.0, which includes a large number of breaking changes as 25+ tables have been updated to use GitHub's GraphQL API. For more information, please see the plugin's [v0.28.0 release notes](https://github.com/turbot/steampipe-plugin-github/blob/main/CHANGELOG.md#v0280-2023-06-21).
+
+_Dependencies_
+
+- GitHub plugin `v0.28.0` or higher is now required. ([#42](https://github.com/turbot/steampipe-mod-github-sherlock/pull/42))
+
 ## v0.9 [2022-06-28]
 
 _Enhancements_

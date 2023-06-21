@@ -31,12 +31,12 @@ control "org_all_seats_used" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when plan_filled_seats >= plan_seats then 'ok'
         else 'alarm'
       end as status,
-      coalesce(name, login) || ' uses ' || plan_filled_seats || ' out of ' || plan_seats || '.' as reason,
+      login || ' uses ' || plan_filled_seats || ' out of ' || plan_seats || '.' as reason,
       login
     from
       github_my_organization
@@ -49,12 +49,18 @@ control "org_two_factor_required" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
+        when two_factor_requirement_enabled is null then 'info'
         when two_factor_requirement_enabled then 'ok'
         else 'alarm'
       end as status,
-      coalesce(name, login) || case when (two_factor_requirement_enabled)::bool then ' requires 2FA' else ' does not require 2FA' end || '.' as reason,
+      login ||
+        case
+          when two_factor_requirement_enabled is null then ' 2FA requirement unverifiable'
+          when (two_factor_requirement_enabled)::bool then ' requires 2FA'
+          else ' does not require 2FA'
+        end || '.' as reason,
       login
     from
       github_my_organization
@@ -67,7 +73,7 @@ control "org_domain_verified" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when is_verified then 'ok'
         else 'alarm'
@@ -85,12 +91,12 @@ control "org_members_cannot_create_public_repos" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when members_can_create_public_repos then 'alarm'
         else 'ok'
       end as status,
-      coalesce(name, login) || ' users ' || case when (members_can_create_public_repos)::bool then 'can ' else 'cannot ' end || 'create public repositories.' as reason,
+      login || ' users ' || case when (members_can_create_public_repos)::bool then 'can ' else 'cannot ' end || 'create public repositories.' as reason,
       login
     from
       github_my_organization
@@ -103,12 +109,12 @@ control "org_members_cannot_create_pages" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when members_can_create_pages then 'alarm'
         else 'ok'
       end as status,
-      coalesce(name, login) || ' users ' || case when (members_can_create_pages)::bool then 'can ' else 'cannot ' end || 'create pages.' as reason,
+      login || ' users ' || case when (members_can_create_pages)::bool then 'can ' else 'cannot ' end || 'create pages.' as reason,
       login
     from
       github_my_organization
@@ -121,12 +127,13 @@ control "org_email_set" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when email is null then 'alarm'
+        when email = '' then 'alarm'
         else 'ok'
       end as status,
-      coalesce(name, login) || ' email is ' || case when (email is null) then 'not set' else email end || '.' as reason,
+      coalesce(name, login) || ' email is ' || case when (email is null) then 'not set' when (email = '') then 'not set' else email end || '.' as reason,
       login
     from
       github_my_organization
@@ -139,12 +146,13 @@ control "org_homepage_set" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
-        when blog is null then 'alarm'
+        when website_url is null then 'alarm'
+        when website_url = '' then 'alarm'
         else 'ok'
       end as status,
-      coalesce(name, login) || ' homepage is ' || case when (blog is null) then 'not set' else blog end || '.' as reason,
+      coalesce(name, login) || ' homepage is ' || case when (website_url is null) then 'not set' when (website_url = '') then 'not set' else website_url end || '.' as reason,
       login
     from
       github_my_organization
@@ -157,15 +165,15 @@ control "org_default_repo_permissions_limited" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when default_repo_permission is null then 'skip'
         when default_repo_permission in ('write', 'admin') then 'alarm'
         else 'ok'
       end as status,
     case
-      when default_repo_permission is null then 'User do not have required permission to query ' || coalesce(name, login) || '.'
-      else coalesce(name, login) || ' default repository permissions are ' || default_repo_permission || '.'
+      when default_repo_permission is null then 'User do not have required permission to query ' || login || '.'
+      else login || ' default repository permissions are ' || default_repo_permission || '.'
     end as reason,
       login
     from
@@ -179,7 +187,7 @@ control "org_description_set" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when description <> '' then 'ok'
         else 'alarm'
@@ -197,7 +205,7 @@ control "org_profile_pic_set" {
   tags        = local.organization_best_practices_common_tags
   sql = <<-EOT
     select
-      html_url as resource,
+      url as resource,
       case
         when avatar_url is not null then 'ok'
         else 'alarm'
