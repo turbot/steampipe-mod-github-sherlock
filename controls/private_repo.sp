@@ -68,17 +68,26 @@ control "private_repo_no_outside_collaborators" {
   description = "Outside collaborators should not have access to private repository content."
   sql = <<-EOT
     select
-      url as resource,
+      r.url as resource,
       case
-        when outside_collaborators_total_count = 0 then 'ok'
+        when count(c.user_login) = 0 then 'ok'
         else 'alarm'
       end as status,
-      name_with_owner || ' has ' || outside_collaborators_total_count || ' outside collaborator(s).' as reason,
-      name_with_owner
+      r.name_with_owner || ' has ' || count(c.user_login)::text || ' outside collaborator(s).' as reason,
+      r.name_with_owner
     from
-      github_my_repository
+      github_my_repository r
+    left outer join
+      github_repository_collaborator c
+    on 
+      r.name_with_owner = c.repository_full_name
+    and 
+      c.affiliation = 'OUTSIDE'
     where
-      visibility = 'PRIVATE' and is_fork = ${local.include_forks}
+      r.visibility = 'PRIVATE' 
+    and
+      r.is_fork = ${local.include_forks}
+    group by name_with_owner, url
   EOT
 }
 
