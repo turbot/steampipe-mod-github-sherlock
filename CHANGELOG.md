@@ -1,3 +1,13 @@
+## v0.11 [2023-07-07]
+
+_Enhancements_
+
+- Updated the `private_repo_no_outside_collaborators` control to align with the breaking changes in the [GitHub plugin](https://github.com/turbot/steampipe-plugin-github/blob/main/CHANGELOG.md#v0290-2023-07-07). ([#45](https://github.com/turbot/steampipe-mod-github-sherlock/pull/45))
+
+_Dependencies_
+
+- GitHub plugin `v0.29.0` or higher is now required. ([#45](https://github.com/turbot/steampipe-mod-github-sherlock/pull/45))
+
 ## v0.10 [2023-06-21]
 
 _What's new?_
