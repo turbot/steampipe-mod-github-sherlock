@@ -249,7 +249,7 @@ control "public_repo_default_branch_blocks_force_push" {
           when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'false' then ' prevents force push.'
           when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_force_pushes') = 'true' then ' allows force push.'
           -- If not false or true, then null, which means no branch protection rule exists
-          else ' is not protected, or you have insufficient permissions to see branch protection rules.'
+          else ' branch protection rule unknown.'
         end as reason,
       name_with_owner
     from
@@ -276,7 +276,7 @@ control "public_repo_default_branch_blocks_deletion" {
           when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'false' then ' prevents deletion.'
           when (default_branch_ref -> 'branch_protection_rule' ->> 'allows_deletions') = 'true' then ' allows deletion.'
           -- If not false or true, then null, which means no branch protection rule exists
-          else ' is not protected, or you have insufficient permissions to see branch protection rules.'
+          else ' branch protection rule unknown.'
         end as reason,
       name_with_owner
     from
@@ -303,7 +303,7 @@ control "public_repo_default_branch_protections_apply_to_admins" {
           when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'true' then ' protections apply to admins.'
           when (default_branch_ref -> 'branch_protection_rule' ->> 'is_admin_enforced') = 'false' then ' protections do not apply to admins.'
           -- If not false or true, then null, which means no branch protection rule exists
-          else ' is not protected, or you have insufficient permissions to see branch protection rules.'
+          else ' branch protection rule unknown.'
         end as reason,
       name_with_owner
     from
@@ -325,11 +325,11 @@ control "public_repo_default_branch_requires_pull_request_reviews" {
         when (default_branch_ref -> 'branch_protection_rule' ->> 'requires_approving_reviews') = 'true' then 'ok'
         else 'alarm'
       end as status,
-      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') || 
-        case 
-          when (default_branch_ref -> 'branch_protection_rule') is null then ' is not protected, or you have insufficient permissions to see branch protection rules.'
-          when (default_branch_ref -> 'branch_protection_rule' ->> 'requires_approving_reviews') = 'true' then ' requires pull request reviews.' 
-          else ' does not require pull request reviews.' 
+      name_with_owner || ' default branch ' || (default_branch_ref ->> 'name') ||
+        case
+          when (default_branch_ref -> 'branch_protection_rule') is null then ' branch protection rule unknown.'
+          when (default_branch_ref -> 'branch_protection_rule' ->> 'requires_approving_reviews') = 'true' then ' requires pull request reviews.'
+          else ' does not require pull request reviews.'
         end as reason,
       name_with_owner
     from
