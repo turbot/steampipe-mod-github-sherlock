@@ -2,7 +2,11 @@
 repository: "https://github.com/turbot/steampipe-mod-github-sherlock"
 ---
 
-# GitHub Sherlock Mod
+# GitHub Sherlock Mod [DEPRECATED]
+
+The GitHub Sherlock Mod has been deprecated and all the existing controls are migrated to GitHub Insight Mod. Please use the [GitHub Insights Mod](https://hub.steampipe.io/mods/turbot/github_insights) instead.
+
+---
 
 Interrogate your GitHub resources with the help of the world's greatest detectives: Steampipe + Sherlock.
 
