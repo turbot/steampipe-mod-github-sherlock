@@ -83,3 +83,4 @@ control "issue_older_30_days" {
       r.is_fork = ${local.include_forks} and i.state = 'OPEN'
   EOT
 }
+
