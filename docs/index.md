@@ -4,7 +4,7 @@ repository: "https://github.com/turbot/steampipe-mod-github-sherlock"
 
 # GitHub Sherlock Mod [DEPRECATED]
 
-The GitHub Sherlock Mod has been deprecated and all the existing controls are migrated to GitHub Insight Mod. Please use the [GitHub Insights Mod](https://hub.steampipe.io/mods/turbot/github_insights) instead.
+The GitHub Sherlock Mod has been deprecated and all the existing controls have been migrated to the GitHub Insight Mod. Please use the [GitHub Insights Mod](https://hub.steampipe.io/mods/turbot/github_insights) instead.
 
 ---
 
