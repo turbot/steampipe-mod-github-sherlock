@@ -24,7 +24,7 @@ mod "github_sherlock" {
 
   require {
     plugin "github" {
-      version = "0.29.0"
+      min_version = "0.29.0"
     }
   }
 }
