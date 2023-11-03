@@ -1,3 +1,9 @@
+## v0.12 [2023-11-03]
+
+_Breaking changes_
+
+- Updated the plugin dependency section of the mod to use `min_version` instead of `version`. ([#53](https://github.com/turbot/steampipe-mod-github-sherlock/pull/53))
+
 ## v0.11 [2023-07-07]
 
 _Enhancements_
