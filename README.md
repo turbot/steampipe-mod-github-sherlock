@@ -1,3 +1,9 @@
+# :warning: DEPRECATED
+
+The GitHub Sherlock Mod has been deprecated and all the existing controls have been migrated to the GitHub Insight Mod. Please use the [GitHub Insights Mod](https://hub.steampipe.io/mods/turbot/github_insights) instead.
+
+---
+
 # GitHub Sherlock Mod for Steampipe
 
 Interrogate your GitHub resources with the help of the World's greatest
