@@ -9,15 +9,15 @@ deep analysis of your GitHub organization and repo configuration and test
 them against operations & security best practices.
 
 Run checks in a dashboard:
-![image](https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_organization_dashboard.png)
+![image](https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_organization_dashboard.png)
 
 Or in a terminal:
-![image](https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_console_output.png)
+![image](https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_console_output.png)
 
 ## Documentation
 
-- **[Benchmarks and controls →](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls)**
-- **[Named queries →](https://hub.powerpipe.io/mods/turbot/github_sherlock/queries)**
+- **[Benchmarks and controls →](https://hub-powerpipe-io-git-development-turbot.vercel.app/mods/turbot/github_sherlock/controls)**
+- **[Named queries →](https://hub-powerpipe-io-git-development-turbot.vercel.app/mods/turbot/github_sherlock/queries)**
 
 ## Current Sherlock Checks:
 * [GitHub Organizations best practices](https://hub.steampipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
@@ -50,7 +50,7 @@ Finally, install the mod:
 mkdir dashboards
 cd dashboards
 powerpipe mod init
-powerpipe mod install github.com/turbot/powerpipe-mod-github-sherlock
+powerpipe mod install github.com/turbot/steampipe-mod-github-sherlock
 ```
 
 ### Browsing Dashboards

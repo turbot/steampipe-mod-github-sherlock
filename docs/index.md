@@ -2,14 +2,14 @@
 
 Interrogate your GitHub resources with the help of the world's greatest detectives: Steampipe + Sherlock.
 
-<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_dashboard.png" width="50%" type="thumbnail"/>
-<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_organization_dashboard.png" width="50%" type="thumbnail"/>
-<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_console_output.png" width="50%" type="thumbnail"/>
+<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_dashboard.png" width="50%" type="thumbnail"/>
+<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_organization_dashboard.png" width="50%" type="thumbnail"/>
+<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_console_output.png" width="50%" type="thumbnail"/>
 
 ## Documentation
 
-- **[Benchmarks and controls →](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls)**
-- **[Named queries →](https://hub.powerpipe.io/mods/turbot/github_sherlock/queries)**
+- **[Benchmarks and controls →](https://hub-powerpipe-io-git-development-turbot.vercel.app/mods/turbot/github_sherlock/controls)**
+- **[Named queries →](https://hub-powerpipe-io-git-development-turbot.vercel.app/mods/turbot/github_sherlock/queries)**
 
 ## Getting started
 
@@ -36,7 +36,7 @@ Finally, install the mod:
 mkdir dashboards
 cd dashboards
 powerpipe mod init
-powerpipe mod install github.com/turbot/powerpipe-mod-github-sherlock
+powerpipe mod install github.com/turbot/steampipe-mod-github-sherlock
 ```
 
 ### Browsing Dashboards
