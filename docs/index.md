@@ -11,12 +11,6 @@ Interrogate your GitHub resources with the help of the world's greatest detectiv
 - **[Benchmarks and controls →](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls)**
 - **[Named queries →](https://hub.powerpipe.io/mods/turbot/github_sherlock/queries)**
 
-## Current Sherlock Checks:
-* [GitHub Organizations best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
-* [Private Repo best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
-* [Public Repo best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
-* [Issue best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
-
 ## Getting Started
 
 ### Installation
