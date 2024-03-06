@@ -1,7 +1,9 @@
 # GitHub Sherlock Mod for Powerpipe
 
-> [!IMPORTANT]
-> Steampipe mods are [migrating to Powerpipe format](https://powerpipe.io) to gain new features. This mod currently works with both Steampipe and Powerpipe, but will only support Powerpipe from v1.x onward.
+> [!IMPORTANT]  
+> [Powerpipe](https://powerpipe.io) is now the preferred way to run this mod! [Migrating from Steampipe →](https://powerpipe.io/blog/migrating-from-steampipe)
+>
+> All v0.x versions of this mod will work in both Steampipe and Powerpipe, but v1.0.0 onwards will be in Powerpipe format only.
 
 Interrogate your GitHub resources with the help of the World's greatest
 detectives: Powerpipe + Sherlock. GitHub Sherlock allows you to perform
@@ -18,12 +20,6 @@ Or in a terminal:
 
 - **[Benchmarks and controls →](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls)**
 - **[Named queries →](https://hub.powerpipe.io/mods/turbot/github_sherlock/queries)**
-
-## Current Sherlock Checks:
-* [GitHub Organizations best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
-* [Private Repo best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
-* [Public Repo best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
-* [Issue best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
 
 ## Getting Started
 
