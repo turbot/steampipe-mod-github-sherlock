@@ -1,5 +1,5 @@
 mod "github_sherlock" {
-  # hub metadata
+  # Hub metadata
   title         = "GitHub Sherlock"
   description   = "Interrogate your GitHub resources with the help of the world's greatest detectives: Powerpipe and Steampipe + Sherlock."
   color         = "#191717"

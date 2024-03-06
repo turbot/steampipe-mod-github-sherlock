@@ -1,17 +1,23 @@
 # GitHub Sherlock Mod
 
-Interrogate your GitHub resources with the help of the world's greatest detectives: Steampipe + Sherlock.
+Interrogate your GitHub resources with the help of the world's greatest detectives: Powerpipe and Steampipe + Sherlock.
 
-<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_dashboard.png" width="50%" type="thumbnail"/>
-<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_organization_dashboard.png" width="50%" type="thumbnail"/>
-<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/add-new-checks/docs/github_sherlock_console_output.png" width="50%" type="thumbnail"/>
+<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_dashboard.png" width="50%" type="thumbnail"/>
+<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_organization_dashboard.png" width="50%" type="thumbnail"/>
+<img src="https://raw.githubusercontent.com/turbot/steampipe-mod-github-sherlock/main/docs/github_sherlock_console_output.png" width="50%" type="thumbnail"/>
 
 ## Documentation
 
-- **[Benchmarks and controls →](https://hub-powerpipe-io-git-development-turbot.vercel.app/mods/turbot/github_sherlock/controls)**
-- **[Named queries →](https://hub-powerpipe-io-git-development-turbot.vercel.app/mods/turbot/github_sherlock/queries)**
+- **[Benchmarks and controls →](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls)**
+- **[Named queries →](https://hub.powerpipe.io/mods/turbot/github_sherlock/queries)**
 
-## Getting started
+## Current Sherlock Checks:
+* [GitHub Organizations best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.org_best_practices)
+* [Private Repo best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.private_repo_best_practices)
+* [Public Repo best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.public_repo_best_practices)
+* [Issue best practices](https://hub.powerpipe.io/mods/turbot/github_sherlock/controls/benchmark.issue_best_practices)
+
+## Getting Started
 
 ### Installation
 
@@ -27,8 +33,6 @@ This mod also requires [Steampipe](https://steampipe.io) with the [Github plugin
 brew install turbot/tap/steampipe
 steampipe plugin install github
 ```
-
-This mod uses the credentials configured in the [GitHub plugin credential](https://hub.steampipe.io/plugins/turbot/github#credentials).
 
 Finally, install the mod:
 
