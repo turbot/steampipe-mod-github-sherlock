@@ -1,10 +1,5 @@
 # GitHub Sherlock Mod for Powerpipe
 
-> [!IMPORTANT]  
-> [Powerpipe](https://powerpipe.io) is now the preferred way to run this mod! [Migrating from Steampipe →](https://powerpipe.io/blog/migrating-from-steampipe)
->
-> All v0.x versions of this mod will work in both Steampipe and Powerpipe, but v1.0.0 onwards will be in Powerpipe format only.
-
 Interrogate your GitHub resources with the help of the World's greatest
 detectives: Powerpipe + Sherlock. GitHub Sherlock allows you to perform
 deep analysis of your GitHub organization and repo configuration and test
